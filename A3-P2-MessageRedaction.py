@@ -18,9 +18,6 @@ def main():
 
         lettersToRedact = getLettersToRedact()
 
-        # for c in lettersToRedact:
-        #     inputString = inputString.upper().replace(c.upper(), "_") # BUG This converts the inputString to uppercase, but the output should be the same case as the input. Need better solution
-
         count = 0
         for c in inputString:
             if c.upper() in lettersToRedact:
@@ -48,7 +45,7 @@ def validateCharacterList(list):
     for i in range(len(list)):
         list[i] = list[i].strip()
         list[i] = list[i].upper()
-        if len(list[i]) != 1:
+        if len(list[i]) != 1 or not list[i].isalpha(): # If the resultant string is more than one character, or not a letter, return None
             return None
 
     return list
