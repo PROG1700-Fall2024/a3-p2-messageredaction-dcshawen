@@ -14,7 +14,7 @@ def main():
     # Outputs formatted title
     print(tower.Template.titleOut(title))
 
-    while True: 
+    while True: # Quit condition in the loop declaration causes unwanted behavior, so breaking manually
         if (inputString := getInputString(firstRun)).upper() == "QUIT" or inputString.upper() == "Q":
             break
 
@@ -25,6 +25,7 @@ def main():
         print("Redacted message: " + outputString)
         print("Number of letters redacted: " + str(count))
         firstRun = False
+        
     print(tower.Template.getLine("-"))
     print("Thank you for using the Message Redaction Program")
     print("Goodbye.")
@@ -32,11 +33,14 @@ def main():
 def redact(string:str, letters:list):
     """ Iterate through the inputString and keep a count of every character replaced for output later.
      Returns the redacted string and the count of redacted characters. """
-
     count = 0
-    for c in string:
+    
+    """ NOTE I have been trying to figure out why this For loop works for days. 
+        string.replace() replaces all instances of a character, so the count variable SHOULD fail when duplicate letters are found... But it doesn't. 
+        I think it's because the For loop declaration uses the string literal and not the string variable, so it doesn't update when the string variable is updated. """
+    for c in string: 
         if c.upper() in letters:
-            string = string.replace(c, "_")
+            string = string.replace(c, "_") # .replace() replaces all instances of the character in the string, the loop exists primarily to count the number of replacements made
             count += 1
     
     return string, count
@@ -52,14 +56,13 @@ def getInputString(firstRun:bool):
 
 def getLettersToRedact():
     """ Gets the letters to redact from the user. """
-
     print("Enter a comma-separate list of letters to redact")
     while (lettersToRedact := validateCharacterList(input("> ").split(","))) == None:
         print("Invalid input\nEnter a comma-separate list of letters to redact")
     
     return lettersToRedact
 
-def validateCharacterList(list):
+def validateCharacterList(list:list):
     """ Validates whether list is a valid list of characters. Returns a list of characters if successful. Returns None if fails. """
     for i in range(len(list)):
         list[i] = list[i].strip() # Removes whitespace. This allows the user to use spaces in their comma-separated list
