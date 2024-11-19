@@ -4,34 +4,42 @@
     Description: Design and write a program that counts and removes all desired letters from any user-entered sentence or phrase.
 """
 
-import ds_tower1_3_0 as tower
+import ds_tower1_3_1 as tower
 
 def main():
     title = "Message Redaction Program"
     firstRun = True
     inputString = ""
+    
     # Outputs formatted title
     print(tower.Template.titleOut(title))
 
-    while True: # Run the loop until the user enters 'quit' or 'q'. I chose not to manually break the loop instead of putting the condition in the declaration because if the user entered 'quit' the loop would finish running before quitting
+    while True: 
         if (inputString := getInputString(firstRun)).upper() == "QUIT" or inputString.upper() == "Q":
             break
 
         lettersToRedact = getLettersToRedact()
 
-        # Iterate through the inputString and keep a count of every character replaced for output later
-        count = 0
-        for c in inputString:
-            if c.upper() in lettersToRedact:
-                inputString = inputString.replace(c, "_")
-                count += 1
+        outputString, count = redact(inputString, lettersToRedact)
 
-        print("Redacted message: " + inputString)
+        print("Redacted message: " + outputString)
         print("Number of letters redacted: " + str(count))
         firstRun = False
-    
+    print(tower.Template.getLine("-"))
     print("Thank you for using the Message Redaction Program")
     print("Goodbye.")
+
+def redact(string:str, letters:list):
+    """ Iterate through the inputString and keep a count of every character replaced for output later.
+     Returns the redacted string and the count of redacted characters. """
+
+    count = 0
+    for c in string:
+        if c.upper() in letters:
+            string = string.replace(c, "_")
+            count += 1
+    
+    return string, count
 
 def getInputString(firstRun:bool):
     """ Gets the input string from the user. On subsequent runs, the instruction will change. """
